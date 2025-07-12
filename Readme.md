@@ -2,9 +2,11 @@
 > This version might contain unexpected behaviors.
 
 >[!IMPORTANT]
-> Untested Version (3.1_beta) 
+> Untested Version (3.1_Aplha) 
+
 <a id="styles"></a>  
 <img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=blockAccess" width="450"/>
+
 ---
 
 This PHP project detects the client's geolocation and VPN usage using the `ip-api` service and applies access control logic based on the detected data.
