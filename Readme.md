@@ -1,136 +1,122 @@
+# BlockAccess
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+BlockAccess is a powerful and easy-to-use React library for controlling content access based on user geolocation and VPN/proxy status. It provides a flexible way to protect your content by allowing or blocking users from specific countries.
+
 >[!WARNING]
 > This version might contain unexpected behaviors.
 
 >[!IMPORTANT]
-> Untested Version (3.1_Alpha) 
+> Untested Version (4.0_Alpha) 
 
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=blockAccess" width="450"/>
+## Features
 
----
+- **Geolocation-based Access Control:** Restrict or grant access to users based on their country.
+- **VPN/Proxy Detection:** Detect and block users who are using VPNs or proxies.
+- **Flexible Configuration:** Configure access rules using a simple JSON file.
+- **Easy to Integrate:** Provides a React component (`AccessControlGate`) and a hook (`useAccessControl`) for seamless integration into your React application.
+- **Customizable UI:** Easily customize the loading and blocked access pages.
 
-This PHP project detects the client's geolocation and VPN usage using the `ip-api` service and applies access control logic based on the detected data.
+## Installation
 
----
-
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Features" width="450"/>
----
-- Detects the client's country based on their IP address.
-- Identifies if the client is using a VPN or proxy.
-- Implements flexible access control logic using a configuration file (`access.txt`).
-- Provides user-friendly error messages in case of failures.
-
----
-
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Requirements" width="450"/>
----
-- PHP-enabled web server.
-- Internet access to query the IP-API service.
-- A configuration file named `access.txt` for access rules.
-
----
-
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Installation" width="450"/>
----
-1. Clone or download the repository to your PHP server.
-2. Place the PHP file (`access_control.php`) in your server's web directory.
-3. Create an `access.txt` file in the same directory with access rules. Example:
-   ```
-   allow:USA
-   allow:Canada
-   block:India
-   block:Israel
-   only:Malaysia
-   ```
-4. Add this code to the file where you want to restrict access:
-   ```php
-   <?php include "access_control.php"; ?>
-   ```
-5. Ensure the server can make outbound HTTP requests to `http://ip-api.com`.
-
----
-
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=How+It+Works" width="450"/>
----
-1. **IP Detection**: The script uses `$_SERVER['REMOTE_ADDR']` to get the client's IP address. If the server is behind a proxy, it checks `$_SERVER['HTTP_X_FORWARDED_FOR']` for the forwarded IP.
-2. **API Query**: The IP is sent to the IP-API service to fetch geolocation and VPN data.
-3. **Error Handling**: If the API call fails or returns an error, access is granted by default with a warning message.
-4. **Access Logic**:
-   - Reads `access.txt` to determine rules.
-   - Grants access to countries marked as `allow`.
-   - Denies access to countries marked as `block`.
-   - Overrides other rules for countries marked as `only`.
-5. **Response**: Displays a message based on the access decision.
-
----
-
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Customization" width="450"/>
----
-- **Access Rules**:
-  Modify the `access.txt` file to add, remove, or update country rules.
-- **VPN Policy**:
-  Adjust the `if ($isVpn)` block in `access_control.php` to change the behavior for VPN users.
-
----
-
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Example+'access.txt'" width="450"/>
----
-```plaintext
-# This file contains access rules for the website:
-# - 'allow' specifies countries that are explicitly allowed to access the site.
-# - 'block' specifies countries that are explicitly denied access to the site.
-# - 'only' specifies countries that are granted special access, overriding other restrictions.
-
-allow:USA
-allow:Canada
-block:India
-block:Israel
-only:Malaysia
+```bash
+npm install blockaccess
 ```
 
----
+## Usage
 
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Instructions+for+use" width="450"/>
----
-1. Add the `access_control.php` script to your PHP project.
-2. Create and configure the `access.txt` file with your desired rules.
-3. Include the `access_control.php` script in any PHP file where you want to apply access restrictions:
-   ```php
-   <?php include "access_control.php"; ?>
-   ```
+### `AccessControlGate` Component
 
----
+The `AccessControlGate` component is the easiest way to protect your content. Wrap the content you want to protect with this component, and it will handle the access control logic automatically.
 
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Notes" width="450"/>
----
-- Ensure compliance with privacy and legal regulations when implementing geolocation-based restrictions.
-- The script depends on the availability of the IP-API service. Consider implementing caching to reduce API usage.
+```jsx
+import React from 'react';
+import { AccessControlGate } from 'blockaccess';
 
----
+function App() {
+  return (
+    <div>
+      <h1>My Awesome App</h1>
+      <AccessControlGate>
+        {/* This content will be protected */}
+        <p>This is a secret message for authorized users only.</p>
+      </AccessControlGate>
+    </div>
+  );
+}
 
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=License" width="450"/>
----
-This project is licensed under the YASL License. See the `LICENSE` file for details.
+export default App;
+```
 
----
+### `useAccessControl` Hook
 
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Acknowledgement" width="450"/>
----
-- [IP-API](http://ip-api.com) for providing the geolocation and VPN detection service.
-- [Flag API](https://flagsapi.com) for providing additional country flag data.
----
+For more advanced use cases, you can use the `useAccessControl` hook to get the access control state and build your own custom logic.
+
+```jsx
+import React from 'react';
+import { useAccessControl } from 'blockaccess';
+
+function MyProtectedComponent() {
+  const { isLoading, isGranted, statusInfo } = useAccessControl();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isGranted) {
+    return <div>Welcome! You have access.</div>;
+  }
+
+  return (
+    <div>
+      <h2>{statusInfo.title}</h2>
+      <p>{statusInfo.message}</p>
+    </div>
+  );
+}
+```
+
+## Configuration
+
+BlockAccess uses a JSON file to configure the access rules. By default, it looks for a file named `access.json` in your public directory. You can customize the path to this file using the `configPath` prop on the `AccessControlGate` component or in the `useAccessControl` hook.
+
+Here is an example of an `access.json` file:
+
+```json
+{
+  "allow_vpn": false,
+  "only": ["United States", "Canada"],
+  "block": [],
+  "allow": []
+}
+```
+
+- **`allow_vpn`**: (boolean) If `false`, users with VPNs or proxies will be blocked.
+- **`only`**: (string[]) An array of countries that are exclusively allowed access. If this array is not empty, only users from these countries will be granted access.
+- **`block`**: (string[]) An array of countries that will be blocked.
+- **`allow`**: (string[]) An array of countries that will be allowed. If the `only` array is empty, you can use this to create a whitelist of allowed countries.
+
+## `AccessControlGate` Props
+
+| Prop               | Type     | Default          | Description                                                                                             |
+| ------------------ | -------- | ---------------- | ------------------------------------------------------------------------------------------------------- |
+| `children`         | `node`   | **required**     | The content to be protected.                                                                            |
+| `configPath`       | `string` | `'/access.json'` | The path to the access control configuration file.                                                      |
+| `loadingComponent` | `node`   | `null`           | A custom React component to display while the access check is in progress.                              |
+| `blockedComponent` | `node`   | `null`           | A custom React component to display when access is denied. It will receive `statusInfo` as a prop.      |
+
+## `useAccessControl` Return Values
+
+The `useAccessControl` hook returns an object with the following properties:
+
+| Key         | Type      | Description                                                                                                |
+| ----------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `isLoading` | `boolean` | `true` if the access check is in progress, otherwise `false`.                                              |
+| `isGranted` | `boolean` | `true` if access is granted, otherwise `false`.                                                            |
+| `statusInfo`| `object`  | An object containing information about the access status (e.g., title, message). This is `null` on loading. |
 
 
+## License
 
-<a id="styles"></a>  
-<img src="https://readme-typing-svg.herokuapp.com?font=Lexend+Giga&size=25&pause=1000&color=CCA9DD&vCenter=true&width=435&height=25&lines=Version+:+3.1_Alpha" width="450"/>
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
