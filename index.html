@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blockAccess - Geolocation & VPN Access Control</title>
+    <link rel="stylesheet" href="src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>blockAccess</h1>
+            <p>Geolocation & VPN Access Control for PHP</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="how-it-works" class="dark-section">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="content-grid">
+                    <div class="grid-item">
+                        <h3><i class="fas fa-map-marker-alt"></i> IP Detection</h3>
+                        <p>The script identifies the client's IP address using <code>$_SERVER['REMOTE_ADDR']</code>, with a fallback to <code>$_SERVER['HTTP_X_FORWARDED_FOR']</code> for proxy environments.</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3><i class="fas fa-cloud"></i> API Query</h3>
+                        <p>The detected IP is sent to the <code>ip-api.com</code> service to fetch comprehensive geolocation data, including country, country code, and VPN/proxy usage.</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3><i class="fas fa-shield-alt"></i> Access Logic</h3>
+                        <p>Based on rules defined in <code>access.txt</code>, the system determines whether to grant or deny access. Rules include <code>allow</code>, <code>block</code>, and <code>only</code>, with <code>only</code> overriding other restrictions.</p>
+                    </div>
+                    <div class="grid-item">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Error Handling</h3>
+                        <p>In case of API call failures or errors, access is granted by default, ensuring a graceful fallback and preventing unintended blocks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="light-section">
+            <div class="container">
+                <h2>Features</h2>
+                <ul>
+                    <li><i class="fas fa-globe"></i> Detects client's country based on IP address.</li>
+                    <li><i class="fas fa-user-secret"></i> Identifies if the client is using a VPN or proxy.</li>
+                    <li><i class="fas fa-cogs"></i> Implements flexible access control logic using a simple configuration file (<code>access.txt</code>).</li>
+                    <li><i class="fas fa-comment-dots"></i> Provides user-friendly error messages and access decisions.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="setup" class="dark-section">
+            <div class="container">
+                <h2>How to Set Up</h2>
+                <ol>
+                    <li><strong>Download:</strong> Clone or download the <code>blockAccess</code> repository to your PHP server.</li>
+                    <li><strong>Placement:</strong> Place the <code>access_control.php</code> file in your server's web directory.</li>
+                    <li><strong>Configuration:</strong> Create an <code>access.txt</code> file in the same directory with your desired access rules.</li>
+                    <li><strong>Integration:</strong> Include the script in any PHP file where you want to restrict access:
+<pre><code>&lt;?php include "access_control.php"; ?&gt;</code></pre>
+                    </li>
+                    <li><strong>Permissions:</strong> Ensure your server can make outbound HTTP requests to <code>http://ip-api.com</code>.</li>
+                </ol>
+                <h3>Example <code>access.txt</code>:</h3>
+                <pre><code># This file contains access rules for the website:
+# - 'allow' specifies countries that are explicitly allowed to access the site.
+# - 'block' specifies countries that are explicitly denied access to the site.
+# - 'only' specifies countries that are granted special access, overriding other restrictions.
+
+allow_vpn:false   # You can set your own value to disable vpn detection
+allow:USA         # Visitors from the USA are explicitly allowed.
+allow:Canada      # Visitors from Canada are explicitly allowed.
+block:India       # Visitors from India are explicitly blocked.
+block:Israel      # Visitors from Israel are explicitly blocked.
+only:Malaysia     # Visitors from Malaysia are treated as Main Users, granted access regardless of other rules.</code></pre>
+            </div>
+        </section>
+
+        <section id="customization" class="light-section">
+            <div class="container">
+                <h2>Customization</h2>
+                <div class="customization-grid">
+                    <div class="customization-item">
+                        <h3><i class="fas fa-file-alt"></i> Access Rules</h3>
+                        <p>Easily modify the <code>access.txt</code> file to add, remove, or update country-specific access rules. This file gives you granular control over who can access your content.</p>
+                    </div>
+                    <div class="customization-item">
+                        <h3><i class="fas fa-user-shield"></i> VPN Policy</h3>
+                        <p>Adjust the <code>if ($isVpn)</code> block within <code>access_control.php</code> to fine-tune behavior for VPN users. Decide whether to allow, block, or handle VPN connections differently.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="notes" class="dark-section">
+            <div class="container">
+                <h2>Important Notes</h2>
+                <ul>
+                    <li>Ensure compliance with privacy and legal regulations when implementing geolocation-based restrictions.</li>
+                    <li>The script relies on the availability and responsiveness of the IP-API service. Consider implementing caching mechanisms to reduce API usage and improve performance.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 blockAccess. All rights reserved. By Yasakei</p>
+            <div class="acknowledgements">
+                <p>Acknowledgements:</p>
+                <ul>
+                    <li><a href="http://ip-api.com" target="_blank">IP-API</a> for geolocation and VPN detection.</li>
+                    <li><a href="https://flagsapi.com" target="_blank">Flag API</a> for country flag data.</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="src/script.js"></script>
+</body>
+</html>
