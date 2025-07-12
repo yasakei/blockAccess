@@ -21,7 +21,7 @@ BlockAccess is a powerful and easy-to-use React library for controlling content 
 ## Installation
 
 ```bash
-npm install blockaccess
+npm install github:yasakei/blockAccess#react
 ```
 
 ## Usage
