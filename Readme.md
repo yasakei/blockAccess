@@ -86,9 +86,9 @@ Here is an example of an `access.json` file:
 ```json
 {
   "allow_vpn": false,
-  "only": ["United States", "Canada"],
-  "block": [],
-  "allow": []
+  "only": ["Malaysia", "Indonesia"],
+  "block": ["India", "Israel", "Jordan"],
+  "allow": ["Bangladesh","Oman"]
 }
 ```
 
